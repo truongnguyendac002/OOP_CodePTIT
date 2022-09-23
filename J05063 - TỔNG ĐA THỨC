@@ -1,0 +1,96 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+class SoHang {
+    private int heSo,bac;
+    public SoHang(int heSo, int bac) {
+        this.heSo = heSo;
+        this.bac = bac;
+    }
+
+    public int getHeSo() {
+        return heSo;
+    }
+
+    public int getBac() {
+        return bac;
+    }
+}
+
+public class DaThuc {
+    private ArrayList<SoHang> arr = new ArrayList<>();
+
+    public DaThuc() {
+    }
+
+    public ArrayList<SoHang> getArr() {
+        return arr;
+    }
+
+    public void setArr(SoHang x) {
+        this.arr.add(x);
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        for (int i = 0; i < arr.size(); i++) {
+            if (i != 0) s += " + ";
+            s += String.format(arr.get(i).getHeSo() + "*x^" + arr.get(i).getBac());
+        }
+        return s;
+    }
+
+    public DaThuc(String s) {
+        StringTokenizer st = new StringTokenizer(s, " + ");
+        while (st.hasMoreTokens()) {
+            String i = st.nextToken();
+            StringTokenizer st2 = new StringTokenizer(i, "*x^");
+            while (st2.hasMoreTokens()) {
+                SoHang x = new SoHang(Integer.parseInt(st2.nextToken()), Integer.parseInt(st2.nextToken()));
+                arr.add(x);
+            }
+        }
+    }
+
+    public DaThuc cong(DaThuc b) {
+        DaThuc c = new DaThuc();
+        int i = 0, j = 0;
+        while (i < this.getArr().size() && j < b.getArr().size()) {
+            SoHang cuai = this.arr.get(i), cuaj = b.getArr().get(j);
+            if (cuai.getBac() > cuaj.getBac()) {
+                c.setArr(cuai);
+                i++;
+            } else if (cuai.getBac() == cuaj.getBac()) {
+                SoHang x = new SoHang(cuai.getHeSo() + cuaj.getHeSo(), cuai.getBac());
+                c.setArr(x);
+                i++;
+                j++;
+            } else {
+                c.setArr(cuaj);
+                j++;
+            }
+        }
+        while (i < this.getArr().size()) {
+            c.setArr(this.arr.get(i));
+            i++;
+        }
+        while (j < b.getArr().size()) {
+            c.setArr(b.arr.get(i));
+            j++;
+        }
+        return c;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = Integer.parseInt(sc.nextLine());
+        while(t-->0){
+            DaThuc p = new DaThuc(sc.nextLine());
+            DaThuc q = new DaThuc(sc.nextLine());
+            DaThuc r = p.cong(q);
+            System.out.println(r);
+        }
+    }
+}
+

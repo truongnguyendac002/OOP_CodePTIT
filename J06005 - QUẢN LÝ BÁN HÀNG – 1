@@ -1,0 +1,131 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+class KhachHang {
+    private String maKhachHang,tenKhachHang,gioiTinh,ngaySinh,diaChi;
+
+    public KhachHang(String maKhachHang, String tenKhachHang, String gioiTinh, String ngaySinh, String diaChi) {
+        this.maKhachHang = maKhachHang;
+        this.tenKhachHang = tenKhachHang;
+        this.gioiTinh = gioiTinh;
+        this.ngaySinh = ngaySinh;
+        this.diaChi = diaChi;
+    }
+
+    public String getMaKhachHang() {
+        return maKhachHang;
+    }
+
+    @Override
+    public String toString() {
+        return tenKhachHang + " " + diaChi ;
+    }
+}
+
+class MatHang {
+    private String maMatHang,tenMatHang,donViTinh;
+    private int giaMua,giaBan;
+
+    public int getGiaMua() {
+        return giaMua;
+    }
+
+    public int getGiaBan() {
+        return giaBan;
+    }
+
+    public String getMaMatHang() {
+        return maMatHang;
+    }
+
+    @Override
+    public String toString() {
+        return tenMatHang + " " + donViTinh + " " + giaMua + " " + giaBan;
+    }
+
+    public MatHang(String maMatHang, String tenMatHang, String donViTinh, String giaMua, String giaBan) {
+        this.maMatHang = maMatHang;
+        this.tenMatHang = tenMatHang;
+        this.donViTinh = donViTinh;
+        this.giaMua = Integer.parseInt(giaMua);
+        this.giaBan = Integer.parseInt(giaBan);
+    }
+}
+
+class HoaDon {
+    private String maHoaDon;
+    private KhachHang khachHang;
+    private MatHang matHang;
+    private int soLuong;
+
+    public int getGia(MatHang x) {
+        return soLuong *  x.getGiaBan();
+    }
+
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+    }
+
+    public void setMatHang(MatHang matHang) {
+        this.matHang = matHang;
+    }
+
+    public void setMaHoaDon(String maHoaDon) {
+        this.maHoaDon = maHoaDon;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public HoaDon() {
+    }
+
+
+    public String inHoaDon() {
+        return maHoaDon + " " + khachHang + " " + matHang + " " + soLuong + " " + getGia(matHang);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        ArrayList<KhachHang> aKhachHang = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            String ma = "KH" + String.format("%03d",i);
+            KhachHang x = new KhachHang(ma,sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine());
+            aKhachHang.add(x);
+        }
+        int m = sc.nextInt();
+        sc.nextLine();
+        ArrayList<MatHang> aMatHang = new ArrayList<>();
+        for (int i = 1; i <= m; i++) {
+            String ma = "MH" + String.format("%03d",i);
+            MatHang x = new MatHang(ma,sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine());
+            aMatHang.add(x);
+        }
+        int t = sc.nextInt();
+        sc.nextLine();
+        for (int i=1; i<=t; i++) {
+            String[] s = sc.nextLine().split("\\s+");
+            HoaDon x = new HoaDon();
+            String ma = "HD" + String.format("%03d",i);
+            x.setMaHoaDon(ma);
+            for (KhachHang o : aKhachHang) {
+                if (o.getMaKhachHang().equals(s[0])) {
+                    x.setKhachHang(o);
+                    break;
+                }
+            }
+            for (MatHang o : aMatHang) {
+                if (o.getMaMatHang().equals(s[1])) {
+                    x.setMatHang(o);
+                    break;
+                }
+            }
+            x.setSoLuong(Integer.parseInt(s[2]));
+            System.out.println(x.inHoaDon());
+        }
+    }
+}
